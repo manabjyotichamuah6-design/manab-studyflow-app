@@ -1,0 +1,6 @@
+{
+  "name": "StudyFlow AI",
+  "description": "An AI-powered study companion that helps students turn notes and difficult topics into clear summaries, active recall flashcards, practice quizzes, and structured revision plans. LEARN SMARTER. STAY ORGANIZED. KEEP MOVING.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

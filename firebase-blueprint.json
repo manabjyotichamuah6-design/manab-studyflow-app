@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile document storing account information, academic goals, and study preferences.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Firebase Auth UID of the user" },
+        "name": { "type": "string", "maxLength": 100, "description": "Student display name" },
+        "email": { "type": "string", "format": "email", "description": "Student email address" },
+        "profilePicture": { "type": "string", "description": "Profile picture URL" },
+        "academicLevel": { "type": "string", "maxLength": 100, "description": "Academic level e.g. High School or College" },
+        "classOrGrade": { "type": "string", "maxLength": 100, "description": "Class or grade level" },
+        "schoolOrUniversity": { "type": "string", "maxLength": 200, "description": "School or University name" },
+        "examTarget": { "type": "string", "maxLength": 200, "description": "Target exam or milestone" },
+        "dob": { "type": "string", "description": "Date of birth" },
+        "subjects": { "type": "array", "description": "List of enrolled subject names" },
+        "mainGoals": { "type": "array", "description": "Core study goals" },
+        "createdAt": { "type": "string", "description": "Creation ISO timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update ISO timestamp" },
+        "onboarded": { "type": "boolean", "description": "Whether onboarding questionnaire is completed" },
+        "isLoggedIn": { "type": "boolean", "description": "Login status flag" },
+        "studyPreferences": { "type": "object", "description": "Preferences like daily goal minutes and theme" }
+      },
+      "required": ["id", "name", "email", "createdAt", "onboarded"]
+    },
+    "NoteItem": {
+      "title": "NoteItem",
+      "description": "Study note document created by or generated for a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Note unique ID" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "title": { "type": "string", "maxLength": 200, "description": "Note title" },
+        "content": { "type": "string", "maxLength": 50000, "description": "Markdown or text content of the note" },
+        "subject": { "type": "string", "maxLength": 100, "description": "Associated subject" },
+        "topic": { "type": "string", "maxLength": 100, "description": "Specific topic name" },
+        "tags": { "type": "array", "description": "Tags for search and filtering" },
+        "createdAt": { "type": "string", "description": "Creation ISO timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update ISO timestamp" },
+        "isBookmarked": { "type": "boolean", "description": "Bookmarked status" }
+      },
+      "required": ["id", "userId", "title", "content", "subject", "createdAt"]
+    },
+    "SubjectItem": {
+      "title": "SubjectItem",
+      "description": "Subject configured in the user's workspace.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Subject unique ID" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "name": { "type": "string", "maxLength": 100, "description": "Subject title" },
+        "topics": { "type": "array", "description": "List of topic strings" },
+        "color": { "type": "string", "maxLength": 30, "description": "Hex color code" },
+        "icon": { "type": "string", "maxLength": 50, "description": "Icon identifier" }
+      },
+      "required": ["id", "userId", "name", "topics", "color"]
+    },
+    "StudyPlanTask": {
+      "title": "StudyPlanTask",
+      "description": "Daily or scheduled study plan task item.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Task unique ID" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "subject": { "type": "string", "maxLength": 100, "description": "Subject name" },
+        "topic": { "type": "string", "maxLength": 150, "description": "Topic name" },
+        "duration": { "type": "string", "maxLength": 50, "description": "Estimated duration e.g. 30 mins" },
+        "type": { "type": "string", "description": "Task type: revision, quiz, practice, or reading" },
+        "completed": { "type": "boolean", "description": "Completion status" },
+        "priority": { "type": "string", "enum": ["high", "medium", "low"], "description": "Task priority" },
+        "targetDate": { "type": "string", "description": "Scheduled date" }
+      },
+      "required": ["id", "userId", "subject", "topic", "completed"]
+    },
+    "FocusSessionLog": {
+      "title": "FocusSessionLog",
+      "description": "Focus timer completion record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Log unique ID" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "subject": { "type": "string", "maxLength": 100, "description": "Subject studied" },
+        "topicStudied": { "type": "string", "maxLength": 150, "description": "Topic focused on" },
+        "durationMinutes": { "type": "number", "description": "Minutes of focused study" },
+        "timestamp": { "type": "string", "description": "Session ISO timestamp" },
+        "notes": { "type": "string", "maxLength": 2000, "description": "Optional notes taken" }
+      },
+      "required": ["id", "userId", "subject", "durationMinutes", "timestamp"]
+    },
+    "StudySession": {
+      "title": "StudySession",
+      "description": "AI study generation package (quiz, flashcards, summary).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Session unique ID" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "topic": { "type": "string", "maxLength": 150, "description": "Studied topic" },
+        "subject": { "type": "string", "maxLength": 100, "description": "Studied subject" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "summary": { "type": "object", "description": "Generated study summary" },
+        "flashcards": { "type": "array", "description": "Generated flashcard deck" },
+        "quiz": { "type": "array", "description": "Generated interactive quiz questions" },
+        "practice": { "type": "array", "description": "Generated practice problems" }
+      },
+      "required": ["id", "userId", "topic", "subject", "createdAt"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "Aggregate student metrics and activity history.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Progress record ID (usually 'summary')" },
+        "userId": { "type": "string", "description": "Owner UID" },
+        "topicsStudied": { "type": "number", "description": "Total topics completed" },
+        "quizzesCompleted": { "type": "number", "description": "Total quizzes taken" },
+        "flashcardsReviewed": { "type": "number", "description": "Total cards reviewed" },
+        "studySessions": { "type": "number", "description": "Total study sessions logged" },
+        "masteredCards": { "type": "number", "description": "Number of mastered flashcards" },
+        "focusMinutesTotal": { "type": "number", "description": "Cumulative focus timer minutes" },
+        "recentActivity": { "type": "array", "description": "List of recent activity log items" },
+        "updatedAt": { "type": "string", "description": "Last update ISO timestamp" }
+      },
+      "required": ["id", "userId", "topicsStudied", "quizzesCompleted", "flashcardsReviewed"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Top-level user profile and preferences document."
+    },
+    "/users/{userId}/notes/{noteId}": {
+      "schema": { "$ref": "#/entities/NoteItem" },
+      "description": "Student notes subcollection."
+    },
+    "/users/{userId}/subjects/{subjectId}": {
+      "schema": { "$ref": "#/entities/SubjectItem" },
+      "description": "User configured subjects subcollection."
+    },
+    "/users/{userId}/planTasks/{taskId}": {
+      "schema": { "$ref": "#/entities/StudyPlanTask" },
+      "description": "Study plan and scheduled tasks subcollection."
+    },
+    "/users/{userId}/focusLogs/{logId}": {
+      "schema": { "$ref": "#/entities/FocusSessionLog" },
+      "description": "Focus timer completion records subcollection."
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/StudySession" },
+      "description": "AI study generation packages subcollection."
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": { "$ref": "#/entities/UserProgress" },
+      "description": "User learning metrics and progress aggregate."
+    }
+  }
+}

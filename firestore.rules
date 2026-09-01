@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Top-level users collection and all subcollections
+    match /users/{userId} {
+      allow get, update, create, delete: if isOwner(userId);
+      allow list: if isOwner(userId);
+
+      // Subcollections under each user document
+      match /notes/{noteId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /subjects/{subjectId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /planTasks/{taskId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /focusLogs/{logId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /sessions/{sessionId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /progress/{progressId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Catch-all for any user-nested subcollection
+      match /{allChildren=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
